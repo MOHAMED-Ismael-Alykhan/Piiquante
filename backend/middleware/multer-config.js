@@ -8,11 +8,11 @@ const MIME_TYPES = {
   'image/png': 'png',
 };
 
-//On crée un objet de configuration pour multer
+//On crée un objet de configuration pour multer. La méthode diskStorage configure le chemin et le nom de fichier pour les fichiers entrants
 const storage = multer.diskStorage({
   //On explique à multer dans quel dossier enregistrer les fichiers
   destination: (req, file, callback) => {
-    callback(null, 'image');
+    callback(null, 'images');
   },
   //On explique à multer quel nom de fichier utiliser
   filename: (req, file, callback) => {
@@ -21,10 +21,10 @@ const storage = multer.diskStorage({
     const name = file.originalname.split(' ').join('_');
     //On crée l'extension du fichier qui sera l'élément de notre dictionnaire qui correspond au mime_type envoyé par le frontend
     const extension = MIME_TYPES[file.mimetype];
-    //On appelle le callback
+    //On appelle le callback et en plus du nom, on utilise un timestamp + l'extension
     callback(null, name + Date.now() + '.' + extension);
   },
 });
 
-//On exporte le middleware multer configuré
+//On exporte le middleware multer configuré, on lui passe la constante storage et lui indique de gérer uniquement les téléchargements de fichiers images
 module.exports = multer({ storage }).single('image');
