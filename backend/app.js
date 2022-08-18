@@ -46,6 +46,9 @@ app.use('/api/sauce', sauceRoutes);
 // route attendue par le frontend, on enregistre ce router dans notre application Express
 app.use('/api/auth', userRoutes);
 
+//On ajoute une route qui va servir des fichiers statiques
+app.use('/images', express.static(path.join(__dirname, 'image')));
+
 /*app.use((req, res, next) => {
   console.log("Requête reçue!");
   next();
