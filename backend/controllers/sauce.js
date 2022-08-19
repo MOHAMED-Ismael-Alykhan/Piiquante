@@ -1,4 +1,6 @@
+const { json } = require('express');
 const Sauce = require('../models/sauce');
+const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
   //On parse l'objet requête car envoyé sous chaîne de caractères
@@ -89,12 +91,38 @@ exports.modifySauce = (req, res, next) => {
 };
 */
 exports.deleteSauce = (req, res, next) => {
+  //On récupère l'objet en base
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      //On vérifie que c'est le créateur de la sauce qui en demande la suppression
+      // On vérifie que le userId récupéré en base correspond bien au userId que nous récupérons du token
+      if (sauce.userId != req.auth.userId) {
+        res.status(401).json({ message: 'Non-autorisé' });
+      } else {
+        //On récupère le nom du fichier
+        const filename = sauce.imageUrl.split('/images/')[1];
+        //On utilise la méthode unlink de fs pour la suppression du fichier dans le système de fichiers
+        fs.unlink(`ìmages/${filename}`, () => {
+          //On supprime l'enregistrement dans la base de données
+          Sauce.deleteOne({ _id: req.params.id })
+            .then(() => {
+              res.status(200).json({ message: 'Sauce supprimé!' });
+            })
+            .catch((error) => res.status(401).json({ error }));
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+/*
   //Pour supprimer la sauce unique ayant le même _id que le paramètre de la requête
   Sauce.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ message: 'sauce supprimée!' }))
     .catch((error) => res.status(400).json({ error }));
 };
-
+*/
 exports.getOneSauce = (req, res, next) => {
   //Pour trouver la sauce unique ayant le même _id que le paramètre de la requête
   Sauce.findOne({ _id: req.params.id })
