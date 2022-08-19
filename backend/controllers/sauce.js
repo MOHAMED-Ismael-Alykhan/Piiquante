@@ -46,12 +46,48 @@ exports.createSauce = (req, res, next) => {
 */
 
 exports.modifySauce = (req, res, next) => {
+  //On regarde si il y a un champ file dans notre objet
+  const sauceObject = req.file
+    ? {
+        //Si c'est le cas on récupère l'objet en parsant la chaîne de caractère et en recréant Url de l'image
+        ...JSON.parse(req.body.thing),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${
+          req.file.filename
+        }`,
+      } // Si il n'y a pas de file transmis, on récupère l'objet directement dans le corps de la requête
+    : { ...req.body };
+  //On supprime le userId venant de la requête pour éviter les fraudes
+  delete sauceObject._userId;
+  //On récupère l'objet en base de données
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      //On vérifie que l'objet appartient bien à l'utilisateur qui nous envoie la requête de modification
+      if (sauce.userId != req.auth.userId) {
+        res.status(401).json({ message: 'Non-autorisé' });
+      } else {
+        //On met à jour notre enregistrement
+        Sauce.updateOne(
+          //On passe notre filtre qui dit quel enregistrement mettre à jour et avec quel objet
+          { _id: req.params.id },
+          { ...sauceObject, _id: req.params.id }
+        )
+          .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+          .catch((error) => res.status(401).json({ error }));
+      }
+    })
+
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
+};
+
+/*
   //Pour modifier la sauce unique ayant le même _id que le paramètre de la requête
   Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'sauce modifiée!' }))
     .catch((error) => res.status(400).json({ error }));
 };
-
+*/
 exports.deleteSauce = (req, res, next) => {
   //Pour supprimer la sauce unique ayant le même _id que le paramètre de la requête
   Sauce.deleteOne({ _id: req.params.id })

@@ -13,7 +13,7 @@ router.post('/', auth, multer, sauceCtrl.createSauce);
 
 /************************ MODIFICATION D'UNE SAUCE *************************/
 
-router.put('/:id', auth, sauceCtrl.modifySauce);
+router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 
 /************************ SUPPRESSION D'UNE SAUCE **************************/
 

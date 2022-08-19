@@ -48,7 +48,7 @@ app.use('/api/sauce', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
 //On ajoute une route qui va servir des fichiers statiques
-app.use('/images', express.static(path.join(__dirname, 'image')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 /*app.use((req, res, next) => {
   console.log("Requête reçue!");
