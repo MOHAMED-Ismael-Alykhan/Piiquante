@@ -12,7 +12,7 @@ exports.signup = (req, res, next) => {
     .hash(req.body.password, 10)
     //On récupère le hash du mot de passe qu'on enregistre dans un nouveau user dans la base de données
     .then((hash) => {
-      const user = new user({
+      const user = new User({
         email: req.body.email,
         password: hash,
       });

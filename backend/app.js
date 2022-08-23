@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   //Permet d'ajouter les headers mentionnées aux requêtes envoyées vers l'API
   res.setHeader(
-    'Access-Control-Allow-header',
+    'Access-Control-Allow-headers',
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
   );
   //Permet d'envoyer des requêtes avec les méthodes mentionnnées
@@ -49,9 +49,9 @@ app.use('/api/auth', userRoutes);
 
 //On ajoute une route qui va servir des fichiers statiques
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-/*app.use((req, res, next) => {
-  console.log("Requête reçue!");
+/*
+app.use((req, res, next) => {
+  console.log('Requête reçue!');
   next();
 });
 
@@ -61,12 +61,12 @@ app.use((req, res, next) => {
 });
 //L'application utilisera cette fonction pour tout type de requëte
 app.use((req, res, next) => {
-  res.json({ message: " Votre requête a bien été reçue!" });
+  res.json({ message: ' Votre requête a bien été reçue!' });
   next();
 });
 
 app.use((req, res, next) => {
-  console.log("Réponse envoyée avec succès!");
+  console.log('Réponse envoyée avec succès!');
 });
 */
 module.exports = app;

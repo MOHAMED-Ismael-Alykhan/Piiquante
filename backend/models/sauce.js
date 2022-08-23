@@ -1,4 +1,4 @@
-const mongoose = require('mangoose');
+const mongoose = require('mongoose');
 
 // Création d'un schéma de données qui contient les champs souhaités pour chaque sauce. ATTENTION champs temporaires
 const sauceSchema = mongoose.Schema({
