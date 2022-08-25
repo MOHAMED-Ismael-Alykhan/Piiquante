@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const app = express();
 
 //On importe les routers
 const sauceRoutes = require('./routes/sauce');
@@ -18,8 +19,6 @@ mongoose
   .then(() => console.log('Connexion à MongoDB réussie!'))
   .catch(() => console.log('Connexion à MongoDB échouée!'));
 
-const app = express();
-
 //Permet à express de prendre toutes les requêtes qui ont comme Content-Type application.json et met à disposition leur body directement sur l'objet req.
 app.use(express.json());
 
@@ -29,7 +28,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   //Permet d'ajouter les headers mentionnées aux requêtes envoyées vers l'API
   res.setHeader(
-    'Access-Control-Allow-headers',
+    'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
   );
   //Permet d'envoyer des requêtes avec les méthodes mentionnnées
@@ -38,11 +37,12 @@ app.use((req, res, next) => {
     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
   );
   //res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  //res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
   next();
 });
 
 // On enregistre le router pour toutes les demandes effectuées vers /api/sauce
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 // route attendue par le frontend, on enregistre ce router dans notre application Express
 app.use('/api/auth', userRoutes);

@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 //On importe le package jsonwebtoken
 const jwt = require('jsonwebtoken');
 
-const user = require('../models/user');
+const User = require('../models/user');
 
 // Création de la fonction signup pour l'enregistrement de nouveaux utilisateurs
 exports.signup = (req, res, next) => {
@@ -16,6 +16,7 @@ exports.signup = (req, res, next) => {
         email: req.body.email,
         password: hash,
       });
+
       //On enregistre dans la base de données
       user
         .save()
@@ -28,8 +29,7 @@ exports.signup = (req, res, next) => {
 // Création de la fonction login pour connecter des utilisateurs existants
 exports.login = (req, res, next) => {
   //On vérifie si un utilisateur existe dans notre base de données
-  user
-    .findOne({ email: req.body.email })
+  User.findOne({ email: req.body.email })
     .then((user) => {
       if (user === null) {
         res
@@ -53,9 +53,23 @@ exports.login = (req, res, next) => {
                   // Clé secrète pour l'encodage (pour le développement temporaire), sert au chiffrement et déchiffrement du token
                   'RANDOM_TOKEN_SECRET',
                   //On définit la durée de validité du token
-                  { expiresIn: '24' }
+                  { expiresIn: '24h' }
                 ),
               });
+
+              /*
+              //Si ok validation de la connexion et attribution d'un token d'authentification
+              let token = jwt.sign(
+                { userId: user._id },
+                'RANDOM_TOKEN_SECRET',
+                //On définit la durée de validité du token
+                { expiresIn: '24' }
+              );
+              res.status(200).json({
+                userId: user_id,
+                token: token,
+              });
+              */
             }
           })
           .catch((error) => {

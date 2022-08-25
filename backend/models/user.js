@@ -14,4 +14,4 @@ const userSchema = mongoose.Schema({
 userSchema.plugin(uniqueValidator);
 
 //On exporte le schéma sous forme de modèle
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

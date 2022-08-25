@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   try {
     // Pour cela on récupère le header que l'on split pour diviser la chaîne de caractère en un tableau autour de l'espace entre le mot Bearer et le token
     // On récupère le token qui est en deuxème d'ou le [1]
-    const token = req.header.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
 
     //On décode le token avec la méthode verify
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
