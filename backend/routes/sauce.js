@@ -17,7 +17,7 @@ router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 
 /************************ SUPPRESSION D'UNE SAUCE **************************/
 
-router.delete(':id', auth, sauceCtrl.deleteSauce);
+router.delete('/:id', auth, sauceCtrl.deleteSauce);
 
 /************************ RECUPERATION D'UNE SAUCE *************************/
 
@@ -26,6 +26,10 @@ router.get('/:id', auth, sauceCtrl.getOneSauce);
 /************************ RECUPERATION DES  SAUCES *************************/
 
 router.get('/', auth, sauceCtrl.getAllSauces);
+
+/************************ Like, Dislike *****************************/
+
+router.post('/:id/like', auth, sauceCtrl.likeSauce);
 
 //On réexporte le router de ce fichier
 module.exports = router;

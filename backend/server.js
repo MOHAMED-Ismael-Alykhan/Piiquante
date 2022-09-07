@@ -1,6 +1,8 @@
 //On importe le package http de node
 const http = require('http');
 
+require('dotenv').config();
+
 //On importe l'application express
 const app = require('./app');
 

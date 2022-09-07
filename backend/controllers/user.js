@@ -51,7 +51,7 @@ exports.login = (req, res, next) => {
                 token: jwt.sign(
                   { userId: user._id },
                   // Clé secrète pour l'encodage (pour le développement temporaire), sert au chiffrement et déchiffrement du token
-                  'RANDOM_TOKEN_SECRET',
+                  process.env.SECRET_TOKEN,
                   //On définit la durée de validité du token
                   { expiresIn: '24h' }
                 ),

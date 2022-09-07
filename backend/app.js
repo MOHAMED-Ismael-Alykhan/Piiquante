@@ -2,15 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
+const helmet = require('helmet');
 
 //On importe les routers
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+app.use(helmet());
 //Connexion à la base de donnéés MongoDB
 mongoose
   .connect(
-    'mongodb+srv://Utilisateur:mgrjl7FOJekAL2ft@cluster0.ua7jqpi.mongodb.net/?retryWrites=true&w=majority',
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_MDP}@cluster0.ua7jqpi.mongodb.net/?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -36,8 +38,8 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Methods',
     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
   );
-  //res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-  //res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
   next();
 });
 
