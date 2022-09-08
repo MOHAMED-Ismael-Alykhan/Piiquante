@@ -80,7 +80,16 @@ exports.modifySauce = (req, res, next) => {
           { _id: req.params.id },
           { ...sauceObject, _id: req.params.id }
         )
-          .then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
+
+          //.then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
+          .then(() => {
+            if (req.file) {
+              const filename = sauce.imageUrl.split('/images/')[1];
+              fs.unlink(`images/${filename}`, (error) => {
+                if (error) console.log(error);
+              });
+            }
+          })
           .catch((error) => res.status(401).json({ error }));
       }
     })

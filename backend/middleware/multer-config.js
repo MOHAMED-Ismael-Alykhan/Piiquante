@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
   filename: (req, file, callback) => {
     //On génère le nouveau nom pour le fichier
     //On utilise le nom d'origine du fichier, on remplace les espaces par '_'
-    const name = file.originalname.split(' ').join('_');
+    const name = file.originalname.split(' ').join('_').split('.')[0];
     //On crée l'extension du fichier qui sera l'élément de notre dictionnaire qui correspond au mime_type envoyé par le frontend
     const extension = MIME_TYPES[file.mimetype];
     //On appelle le callback et en plus du nom, on utilise un timestamp + l'extension
