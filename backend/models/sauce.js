@@ -1,6 +1,7 @@
+//On importe mongoose pour créer un schéma
 const mongoose = require('mongoose');
 
-// Création d'un schéma de données qui contient les champs souhaités pour chaque sauce. ATTENTION champs temporaires
+// Création d'un schéma de données qui contient les champs souhaités pour chaque sauce.
 const sauceSchema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },

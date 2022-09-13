@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   //On récupère le token
   try {
-    // Pour cela on récupère le header que l'on split pour diviser la chaîne de caractère en un tableau autour de l'espace entre le mot Bearer et le token
+    /*Pour cela on récupère le header que l'on split pour diviser la chaîne de caractère en un tableau
+     autour de l'espace entre le mot Bearer et le token*/
     // On récupère le token qui est en deuxème d'ou le [1]
     const token = req.headers.authorization.split(' ')[1];
 

@@ -1,5 +1,7 @@
+//On importe validator
 const validator = require('validator');
 
+//Vérification de la validité de l'Email
 module.exports = (req, res, next) => {
   const { email } = req.body;
 

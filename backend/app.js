@@ -1,8 +1,15 @@
+// On importe express
 const express = require('express');
+//Importation de mongoose
 const mongoose = require('mongoose');
+//On importe path qui nous donne accès au chemin des système fichiers
 const path = require('path');
+// const app qui est notre application
 const app = express();
+//importation de helmet pour sécuriser les en-têtes http
 const helmet = require('helmet');
+//importation de dotenv qui stocke nos variables d'environnement et permet d'eviter de rendre visible dans le code des données sensibles.
+require('dotenv').config();
 
 //On importe les routers
 const sauceRoutes = require('./routes/sauce');
@@ -21,8 +28,12 @@ mongoose
   .then(() => console.log('Connexion à MongoDB réussie!'))
   .catch(() => console.log('Connexion à MongoDB échouée!'));
 
-//Permet à express de prendre toutes les requêtes qui ont comme Content-Type application.json et met à disposition leur body directement sur l'objet req.
+/*Permet à express de prendre toutes les requêtes qui ont comme Content-Type application.json
+ et met à disposition leur body directement sur l'objet req.*/
 app.use(express.json());
+
+/* Le CORS (Cross Origin Resource Sharing) définit comment les serveurs et les navigateurs interagissent,
+ en spécifiant quelles ressources peuvent être demandées de manière légitime */
 
 // Empêche les erreurs de CORS entre deux servers différents.
 app.use((req, res, next) => {
@@ -43,7 +54,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// On enregistre le router pour toutes les demandes effectuées vers /api/sauce
+// On enregistre le router pour toutes les demandes effectuées vers /api/sauces, on utilise le router de sauceRoutes
 app.use('/api/sauces', sauceRoutes);
 
 // route attendue par le frontend, on enregistre ce router dans notre application Express
@@ -51,24 +62,6 @@ app.use('/api/auth', userRoutes);
 
 //On ajoute une route qui va servir des fichiers statiques
 app.use('/images', express.static(path.join(__dirname, 'images')));
-/*
-app.use((req, res, next) => {
-  console.log('Requête reçue!');
-  next();
-});
 
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
-//L'application utilisera cette fonction pour tout type de requëte
-app.use((req, res, next) => {
-  res.json({ message: ' Votre requête a bien été reçue!' });
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log('Réponse envoyée avec succès!');
-});
-*/
+//On exporte pour pouvoir y accéder depuis les autres fichiers
 module.exports = app;

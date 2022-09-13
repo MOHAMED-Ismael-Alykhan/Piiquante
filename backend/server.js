@@ -1,21 +1,23 @@
 //On importe le package http de node
 const http = require('http');
 
-require('dotenv').config();
-
 //On importe l'application express
 const app = require('./app');
 
 //La fonction normalizePort renvoie un port valide, qu'il soit fourni sous forme de d'un numéro ou d'une chaîne
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
-
+  // Si port n'est pas un nombre
   if (isNaN(port)) {
+    // retourne val
     return val;
   }
+  // si port est un nombre >=0
   if (port >= 0) {
+    // retourne port
     return port;
   }
+  // sinon retourne Faux
   return false;
 };
 
@@ -46,7 +48,7 @@ const errorHandler = (error) => {
 
 //On passe l'application express au server
 const server = http.createServer(app);
-
+// si le server est en erreur, on appelle la fonction errorHandler qui gère les erreurs
 server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();

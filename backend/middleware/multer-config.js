@@ -26,5 +26,6 @@ const storage = multer.diskStorage({
   },
 });
 
-//On exporte le middleware multer configuré, on lui passe la constante storage et lui indique de gérer uniquement les téléchargements de fichiers images
+/*On exporte le middleware multer configuré, on lui passe la constante storage
+ et lui indique de gérer uniquement les téléchargements de fichiers images*/
 module.exports = multer({ storage }).single('image');

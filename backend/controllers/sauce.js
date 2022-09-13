@@ -1,6 +1,9 @@
-//const { json } = require('express');
+// On importe le modèle de la sauce
 const Sauce = require('../models/sauce');
+// On importe le filesystem (fs) qui permet de gérer les fichiers
 const fs = require('fs');
+
+/********************* CREATION D'UNE SAUCE *****************/
 
 exports.createSauce = (req, res, next) => {
   //On parse l'objet requête car envoyé sous chaîne de caractères
@@ -14,7 +17,7 @@ exports.createSauce = (req, res, next) => {
 
   //On crée notre objet
   const sauce = new Sauce({
-    //Avec ce qui nous a été passé moins les deux champs supprimés
+    //Avec ce qui nous a été passé moins les deux champs supprimés précédemment
     ...sauceObject,
     likes: 0,
     dislikes: 0,
@@ -36,25 +39,24 @@ exports.createSauce = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-/*
-  //on retire le champ id du corps de la requête qui a été généré par mongoDB
-  delete req.body._id;
-  //On crée une instance de notre modèle Sauce en lui passant un objet Javascript contenant les infos requises du corps de la requête.
-  const sauce = new Sauce({
-    ...req.body,
-  });
-
-  //On enregistre cette sauce dans la base de données
-  sauce
-    .save()
-    .then(() => res.status(201).json({ message: 'Sauce enregistrée!' }))
-    .catch((error) => res.status(400).json({ error }));
-};
-*/
-
-/************************************** METHODE BASE ************************************************** */
+/*********************************** MODIFIER UNE SAUCE BASE **********************************/
 
 exports.modifySauce = (req, res, next) => {
+  // Suppression de l'ancienne image si une nouvelle est choisie
+  if (req.file) {
+    Sauce.findOne({ _id: req.params.id })
+      .then((sauce) => {
+        delete sauceObject._userId;
+        if (sauce.userId === req.auth.userId) {
+          const filename = sauce.imageUrl.split('/images/')[1];
+          fs.unlink(`images/${filename}`, (err) => {
+            if (err) throw err;
+          });
+        }
+      })
+      .catch((error) => res.status(400).json({ error }));
+  }
+
   //On regarde si il y a un champ file dans notre objet
   const sauceObject = req.file
     ? {
@@ -81,15 +83,8 @@ exports.modifySauce = (req, res, next) => {
           { ...sauceObject, _id: req.params.id }
         )
 
-          //.then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
-          .then(() => {
-            if (req.file) {
-              const filename = sauce.imageUrl.split('/images/')[1];
-              fs.unlink(`images/${filename}`, (error) => {
-                if (error) console.log(error);
-              });
-            }
-          })
+          .then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
+
           .catch((error) => res.status(401).json({ error }));
       }
     })
@@ -98,6 +93,8 @@ exports.modifySauce = (req, res, next) => {
       res.status(400).json({ error });
     });
 };
+
+/**************************** EFFACER UNE SAUCE ****************************/
 
 exports.deleteSauce = (req, res, next) => {
   //On récupère l'objet en base
@@ -114,6 +111,7 @@ exports.deleteSauce = (req, res, next) => {
         //On utilise la méthode unlink de fs pour la suppression du fichier dans le système de fichiers
         fs.unlink(`images/${filename}`, () => {
           //On supprime l'enregistrement dans la base de données
+          //Pour supprimer la sauce unique ayant le même _id que le paramètre de la requête
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => {
               res.status(200).json({ message: 'Sauce supprimé!' });
@@ -127,19 +125,17 @@ exports.deleteSauce = (req, res, next) => {
     });
 };
 
-/*
-  //Pour supprimer la sauce unique ayant le même _id que le paramètre de la requête
-  Sauce.deleteOne({ _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'sauce supprimée!' }))
-    .catch((error) => res.status(400).json({ error }));
-};
-*/
+/********************* ACCEDER A UNE SAUCE ********************************/
+
 exports.getOneSauce = (req, res, next) => {
   //Pour trouver la sauce unique ayant le même _id que le paramètre de la requête
   Sauce.findOne({ _id: req.params.id })
-    .then((thing) => res.status(200).json(thing))
+    .then((sauce) => res.status(200).json(sauce))
+    // SI erreur envoit un statut 404 Not found
     .catch((error) => res.status(404).json({ error }));
 };
+
+/********************* ACCEDER A TOUTES LES SAUCES ************************/
 
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()

@@ -1,7 +1,7 @@
 //On importe passwordSchema
 const passwordSchema = require('../models/password');
 
-//Vérification de la construction du password par rapport au schgéma
+//Vérification de la construction du password par rapport au schéma
 module.exports = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
     next();
