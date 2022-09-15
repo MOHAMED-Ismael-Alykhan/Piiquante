@@ -23,6 +23,7 @@ Ainsi vous avez la possibilité de cloner ce repository pour récupérer en loca
 ### Installation
 
 - Cloner le repository depuis GitHub.
+  \*Ce projet utilise .dotenv pour protéger les mots de passes et la clé du token figurant dans le code. Par conséquent il faudra penser à créer un fichier .env dans le backend afin d'y rentrer les différents mots de passes. Ces mots de passes seront transmis dans un document txt à part pour garantir la confidentialité du projet.
 
 #### Pour lancer le Frontend
 
