@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
   } else {
     return res.status(400).json({
       message:
-        "le password n'est pas assez fort et doit contenir 5 caractères au minimum, au moins une majuscule, une minuscule et deux chiffres au minimum et ne pas contenir d'espace.",
+        "le password n'est pas assez fort et doit contenir 8 caractères au minimum, au moins une majuscule, une minuscule et deux chiffres au minimum et ne pas contenir d'espace.",
     });
   }
 };
