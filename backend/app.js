@@ -8,6 +8,8 @@ const path = require('path');
 const app = express();
 //importation de helmet pour sécuriser les en-têtes http
 const helmet = require('helmet');
+//importation de express-mongo-sanitize  pour empêcher les injections externes vers la base de données.
+const mongoSanitize = require('express-mongo-sanitize');
 //importation de dotenv qui stocke nos variables d'environnement et permet d'eviter de rendre visible dans le code des données sensibles.
 require('dotenv').config();
 
@@ -31,6 +33,9 @@ mongoose
 /*Permet à express de prendre toutes les requêtes qui ont comme Content-Type application.json
  et met à disposition leur body directement sur l'objet req.*/
 app.use(express.json());
+
+//Protège contre les injections en remplaçant les caractères interdit.
+app.use(mongoSanitize({ replaceWith: '_' }));
 
 /* Le CORS (Cross Origin Resource Sharing) définit comment les serveurs et les navigateurs interagissent,
  en spécifiant quelles ressources peuvent être demandées de manière légitime */

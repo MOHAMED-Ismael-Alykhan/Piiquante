@@ -143,3 +143,83 @@ exports.getAllSauces = (req, res, next) => {
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
 };
+
+/**************************** LIKE, DISLIKE METHODE  ***************************/
+
+exports.likeSauce = (req, res, next) => {
+  // on utilise le modele mangoose et findOne pour trouver un objet via la comparaison req.params.id
+  Sauce.findOne({ _id: req.params.id })
+    //retourne une promise avec reponse status 200 OK et l'élément en json
+    .then((sauce) => {
+      // On définit des variables pour gérer les likes et dislikes
+      let voteValue;
+      let voter = req.body.userId;
+      let like = sauce.usersLiked;
+      let unlike = sauce.usersDisliked;
+      // determine si l'utilisateur est dans un tableau.
+      // Soit si l'utilisateur a liké, soit si l'utilisateur à disliké
+      let good = like.includes(voter);
+      let bad = unlike.includes(voter);
+      // On va attribuer une valeur de point en fonction du tableau dans lequel il est
+      if (good === true) {
+        voteValue = 1;
+      } else if (bad === true) {
+        voteValue = -1;
+      } else {
+        // Dans le cas ou l'utilisateur n'a pas liké ni disliké
+        voteValue = 0;
+      }
+      // On va determiner le vote de l'utilisateur par rapport à une action de vote
+      // si l'utilisateur n'a pas voté avant et vote positivement
+      if (voteValue === 0 && req.body.like === 1) {
+        // ajoute 1 vote positif à likes
+        sauce.likes += 1;
+        // le tableau usersLiked contiendra l'id de l'utilisateur (du votant)
+        sauce.usersLiked.push(voter);
+        // si l'utilisateur a voté positivement et veut annuler son vote
+      } else if (voteValue === 1 && req.body.like === 0) {
+        // enlève 1 vote positif
+        sauce.likes -= 1;
+        // filtre/enlève l'id du votant du tableau usersLiked
+        const newUsersLiked = like.filter((f) => f != voter);
+        // on actualise le tableau
+        sauce.usersLiked = newUsersLiked;
+        // si l'utilisateur a voté négativement et veut annuler son vote
+      } else if (voteValue === -1 && req.body.like === 0) {
+        // enlève un vote négatif
+        sauce.dislikes -= 1;
+        // filtre/enlève l'id du votant du tableau usersDisliked
+        const newUsersDisliked = unlike.filter((f) => f != voter);
+        // on actualise le tableau
+        sauce.usersDisliked = newUsersDisliked;
+        // si l'utilisateur n'a pas voté avant et vote négativement
+      } else if (voteValue === 0 && req.body.like === -1) {
+        // ajoute 1 vote positif à unlikes
+        sauce.dislikes += 1;
+        // le tableau usersDisliked contiendra l'id de l'utilisateur
+        sauce.usersDisliked.push(voter);
+      } else {
+        console.log('tentavive de vote illégal');
+      }
+      // O met à jour la sauce
+      Sauce.updateOne(
+        { _id: req.params.id },
+        {
+          likes: sauce.likes,
+          dislikes: sauce.dislikes,
+          usersLiked: sauce.usersLiked,
+          usersDisliked: sauce.usersDisliked,
+        }
+      )
+        // retourne une promise avec status 201
+        .then(() => res.status(201).json({ message: 'Vous venez de voter' }))
+
+        .catch((error) => {
+          if (error) {
+            console.log(error);
+          }
+        });
+    })
+    // si erreur envoie un status 404 Not Found et l'erreur en json
+    .catch((error) => res.status(404).json({ error }));
+};
