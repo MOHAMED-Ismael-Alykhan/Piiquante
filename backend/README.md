@@ -42,7 +42,7 @@ Ainsi vous avez la possibilité de cloner ce repository pour récupérer en loca
 - Exécuter `npm install`pour installer les dépendances.
 - Lancer le server avec `nodemon server`.
 
-## En cas de non création d'un compte sur le site Hot Takes il ne faut pas hésiter à relancer le frontend avec `npm start` et le backend avec `nodemon server`.
+### En cas de non création d'un compte sur le site Hot Takes il ne faut pas hésiter à relancer le frontend avec `npm start` et le backend avec `nodemon server`.
 
 #### CONNEXION IMPORTANT
 
