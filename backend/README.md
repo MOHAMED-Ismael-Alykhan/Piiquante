@@ -26,6 +26,8 @@ Ainsi vous avez la possibilité de cloner ce repository pour récupérer en loca
 
 * Ce projet utilise .dotenv pour protéger les mots de passes et la clé du token figurant dans le code. Par conséquent il faudra penser à créer un fichier .env dans le backend afin d'y rentrer les différents mots de passes. Ces mots de passes seront transmis dans un document txt à part pour garantir la confidentialité du projet.
 
+* Il est égalemnt nécessaire de créer un dossier "images" dans le backend.
+
 #### Pour lancer le Frontend
 
 - Aller sur le dossier Frontend et ouvrir un terminal.
