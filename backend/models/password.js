@@ -9,7 +9,7 @@ passwordSchema
   .is()
   .min(8) // Longueur minimum de caractères (8)
   .is()
-  .max(20) // Longueur maximum de caractères (20)
+  .max(100) // Longueur maximum de caractères (100)
   .has()
   .uppercase() // Doit avoir une lettre majuscule
   .has()

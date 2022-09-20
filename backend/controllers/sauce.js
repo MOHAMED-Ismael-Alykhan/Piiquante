@@ -39,7 +39,7 @@ exports.createSauce = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-/*********************************** MODIFIER UNE SAUCE BASE **********************************/
+/*********************************** MODIFIER UNE SAUCE **********************************/
 
 exports.modifySauce = (req, res, next) => {
   // Suppression de l'ancienne image si une nouvelle est choisie
@@ -201,7 +201,7 @@ exports.likeSauce = (req, res, next) => {
       } else {
         console.log('tentavive de vote illégal');
       }
-      // O met à jour la sauce
+      // On met à jour la sauce
       Sauce.updateOne(
         { _id: req.params.id },
         {
