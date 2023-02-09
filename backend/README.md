@@ -46,5 +46,7 @@ Ainsi vous avez la possibilité de cloner ce repository pour récupérer en loca
 
 #### CONNEXION IMPORTANT
 
+- CREER un DOSSIER "images" DANS le DOSSIER BACKEND
+
 - Pour s'inscrire sur l'application, l'utilisateur doit rentrer un Email au format valide et un mot de passe de
   8 caractères au minimum, au moins une majuscule, une minuscule et deux chiffres au minimum et ne pas contenir d'espace.

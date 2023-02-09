@@ -8,7 +8,7 @@ const raterLimit = require('express-rate-limit');
 // définition de la limitation de requetes
 const limiter = raterLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 50, // nombre d'essais
+  max: 100, // nombre d'essais
   message: 'trop de requêtes',
 });
 
